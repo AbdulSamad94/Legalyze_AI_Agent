@@ -99,75 +99,88 @@ You’ll be able to interact with your Legalyze AI Agent via the terminal.
 
 ```mermaid
 graph TD
-    A[User Input] --> B[🛡 Input Guardrail Check]
-    B --> C{🔍 Contains Sensitive Info?}
-    C -->|Yes| D[⛔ Block Request]
-    C -->|No| E[🧠 MainAgent - Decision Router]
-
-    E --> F[📄 DocumentDetectorAgent Tool]
-    F --> G{📌 Input Type?}
-
-    G -->|Legal Document| H[📑 AnalysisAgent]
-    G -->|Casual Chat| I[💬 CasualChatAgent]
-    G -->|Unclear| J[❓ Default Response]
-
-    H --> K[🛡 Input Guardrail Check]
-    K --> L{🔍 Sensitive Info?}
-    L -->|Yes| M[⛔ Block Analysis]
-    L -->|No| N[🚀 Start Analysis Workflow]
-
-    N --> O[📝 SummarizerAgent Tool]
-    O --> P[⏳ Wait for Summary]
-    P --> Q[⚠️ RiskDetectorAgent Tool]
-    Q --> R[⏳ Wait for Risk Analysis]
-    R --> S[🔎 ClauseCheckerAgent Tool]
-    S --> T[⏳ Wait for Clause Check]
-
-    T --> U[🔗 Combine Results]
-    U --> V[🛡 Output Guardrail Check]
-    V --> W{✅ Output Valid?}
-    W -->|No| X[❌ Trigger Error]
-    W -->|Yes| Y[🤝 FriendlyAgent]
-
-    Y --> Z[🎨 Format Response]
-    Z --> AA[🛡 Output Guardrail Check]
-    AA --> BB{✅ Response Valid?}
-    BB -->|No| CC[❌ Trigger Error]
-    BB -->|Yes| DD[📬 Final Response]
-
-    I --> EE[💡 Generate Chat Response]
-    EE --> FF[🛡 Output Guardrail Check]
-    FF --> GG{✅ Response Valid?}
-    GG -->|No| HH[❌ Trigger Error]
-    GG -->|Yes| II[💬 Chat Response]
-
-    J --> JJ[💭 Default Message]
-
-    %% Error Handling
-    D --> KK[❗ Error Message]
+    ---
+config:
+  layout: dagre
+---
+flowchart TD
+    A["User Input"] --> B["Input Guardrail Check"]
+    B --> C{"Contains Sensitive Info?"}
+    C -- Yes --> D["Block Request"]
+    C -- No --> E["MainAgent - Decision Router"]
+    E --> F["DocumentDetectorAgent Tool"]
+    F --> G{"Input Type?"}
+    G -- Legal Document --> H["Analysis-Agent"]
+    G -- Casual Chat --> I["CasualChatAgent"]
+    G -- Unclear --> J["Default Response"]
+    H --> K["Input Guardrail Check"]
+    K --> L{"Sensitive Info?"}
+    L -- Yes --> M["Block Analysis"]
+    L -- No --> N["Start Analysis Workflow"]
+    N --> O["SummarizerAgent Tool"]
+    O --> P["Wait for Summary"]
+    P --> Q["RiskDetectorAgent Tool"]
+    Q --> R["Wait for Risk Analysis"]
+    R --> S["ClauseCheckerAgent Tool"]
+    S --> T["Wait for Clause Check"]
+    T --> U["Combine Results"]
+    U --> V["Output Guardrail Check"]
+    V --> W{"Output Valid?"}
+    W -- No --> X["Trigger Error"]
+    W -- Yes --> Y["FriendlyAgent"]
+    Y --> Z["Format Response"]
+    Z --> AA["Output Guardrail Check"]
+    AA --> BB{"Response Valid?"}
+    BB -- No --> CC["Trigger Error"]
+    BB -- Yes --> DD["Final Response"]
+    I --> EE["Generate Chat Response"]
+    EE --> FF["Output Guardrail Check"]
+    FF --> GG{"Response Valid?"}
+    GG -- No --> HH["Trigger Error"]
+    GG -- Yes --> II["Chat Response"]
+    J --> JJ["Default Message"]
+    D --> KK["Error Message"]
     M --> KK
     X --> KK
     CC --> KK
     HH --> KK
-
-    %% Final Outputs
-    DD --> LL[✅ User Sees Legal Analysis]
-    II --> MM[✅ User Sees Chat Response]
-    JJ --> NN[✅ User Sees Default Message]
-    KK --> OO[🚫 User Sees Error]
-
-    %% Styling
+    DD --> LL["User Sees Legal Analysis"]
+    II --> MM["User Sees Chat Response"]
+    JJ --> NN["User Sees Default Message"]
+    KK --> OO["User Sees Error"]
+     B:::guardrail
+     C:::decision
+     D:::error
+     E:::agent
+     G:::decision
+     H:::agent
+     I:::agent
+     K:::guardrail
+     L:::decision
+     M:::error
+     O:::agent
+     Q:::agent
+     S:::agent
+     V:::guardrail
+     W:::decision
+     X:::error
+     Y:::agent
+     AA:::guardrail
+     BB:::decision
+     CC:::error
+     DD:::output
+     FF:::guardrail
+     GG:::decision
+     HH:::error
+     II:::output
+     JJ:::output
+     KK:::error
     classDef agent fill:#e3f2fd,stroke:#1565c0,color:#000,font-weight:bold,stroke-width:2px
     classDef guardrail fill:#fff8e1,stroke:#ff8f00,color:#000,font-weight:bold,stroke-width:2px
     classDef decision fill:#ede7f6,stroke:#6a1b9a,color:#000,font-weight:bold,stroke-width:2px
     classDef output fill:#e8f5e9,stroke:#2e7d32,color:#000,font-weight:bold,stroke-width:2px
     classDef error fill:#ffebee,stroke:#c62828,color:#000,font-weight:bold,stroke-width:2px
 
-    class E,H,I,O,Q,S,Y agent
-    class B,K,V,AA,FF guardrail
-    class C,G,L,W,BB,GG decision
-    class DD,II,JJ output
-    class D,M,X,CC,HH,KK error
 ```
 
 ---
