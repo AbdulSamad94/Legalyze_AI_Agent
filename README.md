@@ -99,11 +99,6 @@ You’ll be able to interact with your Legalyze AI Agent via the terminal.
 
 ```mermaid
 graph TD
-    ---
-config:
-  layout: dagre
----
-flowchart TD
     A["User Input"] --> B["Input Guardrail Check"]
     B --> C{"Contains Sensitive Info?"}
     C -- Yes --> D["Block Request"]
