@@ -1,4 +1,4 @@
-from agents import OpenAIChatCompletionsModel
+from agents import OpenAIChatCompletionsModel, OpenAIResponsesModel
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 import os
@@ -14,3 +14,4 @@ client = AsyncOpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
 )
 model = OpenAIChatCompletionsModel(openai_client=client, model="gemini-2.0-flash")
+# model = OpenAIResponsesModel(openai_client=client, model="gemini-2.0-flash")

@@ -4,7 +4,9 @@ from agents import (
     RunConfig,
     InputGuardrailTripwireTriggered,
     OutputGuardrailTripwireTriggered,
+    ModelSettings,
 )
+from agents.extensions.visualization import draw_graph
 import asyncio
 import logging
 from pydantic_models import (
@@ -21,7 +23,7 @@ from agent_instructions import (
     main_agent_instruction,
 )
 from model import model, client
-from agents_definitions import (  # Import Tools_and_Agent ki jagah agents_definitions se kiya gaya hai
+from agents_definitions import (
     summarizer_agent,
     risk_detector_agent,
     clause_checker_agent,
@@ -35,9 +37,7 @@ from guardrails import (
 )
 from Logger import SimpleLogger
 
-
-logging.basicConfig(level=logging.DEBUG)
-
+# logging.basicConfig(level=logging.DEBUG)
 
 analysis_agent = Agent(
     name="LegalAnalysisAgent",
@@ -66,6 +66,7 @@ main_agent = Agent(
     name="MainLegalAgent",
     instructions=main_agent_instruction,
     model=model,
+    model_settings=ModelSettings(temperature=0.1),
     input_guardrails=[sensitive_input_guardrail],
     tools=[
         document_detector_agent.as_tool(
